@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
 }
 
-ext.pluginVersionCode = 6
+ext.pluginVersionCode = 5
 ext.pluginVersionName = "2.1.0-async"
 
 android {

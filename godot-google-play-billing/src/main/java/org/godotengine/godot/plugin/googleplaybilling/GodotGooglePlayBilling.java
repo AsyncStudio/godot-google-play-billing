@@ -30,6 +30,8 @@
 
 package org.godotengine.godot.plugin.googleplaybilling;
 
+import android.text.TextUtils;
+
 import org.godotengine.godot.Dictionary;
 import org.godotengine.godot.Godot;
 import org.godotengine.godot.plugin.GodotPlugin;
@@ -232,16 +234,22 @@ public class GodotGooglePlayBilling extends GodotPlugin implements PurchasesUpda
 
         // TODO: Allow for selecting other than the default/first offer
 
+        System.out.println("productDetails:");
+        System.out.println(productDetails.toString());
         String offerToken = null;
         if (productDetails.getSubscriptionOfferDetails() != null && !productDetails.getSubscriptionOfferDetails().isEmpty()) {
             offerToken = productDetails.getSubscriptionOfferDetails().get(0).getOfferToken();
         }
 
+        BillingFlowParams.ProductDetailsParams.Builder detailsParamsBuilder =
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(productDetails);
+        if (offerToken != null && !TextUtils.isEmpty(offerToken)) {
+            detailsParamsBuilder.setOfferToken(offerToken);
+        }
+
         List<BillingFlowParams.ProductDetailsParams> params = List.of(
-                BillingFlowParams.ProductDetailsParams.newBuilder()
-                        .setOfferToken(offerToken)
-                        .setProductDetails(productDetails)
-                        .build()
+            detailsParamsBuilder.build()
         );
 
         BillingFlowParams.Builder purchaseParamsBuilder = BillingFlowParams.newBuilder();
